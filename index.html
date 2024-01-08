@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency and Tax Calculator</title>
+    <title>Grocery Calculator</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="calculator">
-        <h2>Currency and Tax Calculator</h2>
+        <h2>Grocery Calculator</h2>
+        <h3 class="subtitle">Bellingham to BC</h3>
         <input type="number" id="itemPrice" placeholder="Item Price in USD">
         <input type="number" id="conversionRate" placeholder="Current USD to CAD Rate (e.g., 1.34)">
         <button id="calculate">Calculate</button>
         <div id="results">
             <p id="cadPrice">CAD Price: </p>
+            <small>(Amount You Pay)</small>
             <p id="bcPrice">Price with BC Tax: </p>
+            <small>(For Comparison)</small>
         </div>
     </div>
     <script src="js/script.js"></script>
