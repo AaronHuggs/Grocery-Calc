@@ -50,14 +50,20 @@ function validateInput(value) {
 }
 
 // Function to add a history entry
-function addHistoryEntry(containerId, input, output) {
+function addHistoryEntry(containerId, historyText) {
     var historyContainer = document.getElementById(containerId);
-    var currentDate = new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
-    var historyEntry = input + " -> " + output.toFixed(2) + "              " + currentDate;
+    var currentDateTime = new Date().toLocaleString("en-US", { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    var fullHistoryEntry = historyText + "              " + currentDateTime;
     
     // Create a new paragraph for each entry
     var p = document.createElement("p");
-    p.textContent = historyEntry;
+    p.textContent = fullHistoryEntry;
     historyContainer.insertBefore(p, historyContainer.firstChild);
 }
 
@@ -82,6 +88,8 @@ document.getElementById('conversionRateGas').addEventListener('input', function(
 document.getElementById('calculate').addEventListener('click', function() {
     var itemPrice = parseFloat(document.getElementById('itemPrice').value);
     var conversionRate = parseFloat(document.getElementById('conversionRate').value);
+    var itemName = document.getElementById('itemName').value.trim(); // Get item name and trim whitespace
+
 
     if (!validateInput(itemPrice) || !validateInput(conversionRate)) {
         alert("Please enter valid numbers for item price and conversion rate.");
@@ -97,7 +105,10 @@ document.getElementById('calculate').addEventListener('click', function() {
 
     document.getElementById('cadPrice').textContent = 'Price Paid in Bellingham (CAD): ' + finalCadPrice.toFixed(2) + ' CAD';
 
-    addHistoryEntry("groceryHistory", itemPrice.toFixed(2), finalCadPrice);
+    // Include item name in history if provided
+    var historyText = itemName ? `${itemName}: $${itemPrice.toFixed(2)} -> $${finalCadPrice.toFixed(2)}` : `$${itemPrice.toFixed(2)} -> $${finalCadPrice.toFixed(2)}`;
+    addHistoryEntry("groceryHistory", historyText);
+    
 });
 
 // Gas Prices Calculator Logic with Error Handling
