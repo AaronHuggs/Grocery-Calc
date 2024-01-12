@@ -3,6 +3,14 @@
     box-sizing: border-box;
 }
 
+body, html {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
 /* Hide spinners for number inputs */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -16,144 +24,62 @@ input[type=number] {
     margin: 10px 0; /* Consistent margin for spacing */
     border-radius: 4px; /* Optional: for rounded corners */
     border: 1px solid #ddd; /* Border style */
-    box-sizing: border-box; /* Include padding and border in the width */
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* Tab buttons and content styling */
+.tab {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ccc;
     margin: 0;
+}
+
+.tab button {
+    background-color: #f1f1f1;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    margin-right: 2px;
+}
+
+.tab button:nth-child(1) { background-color: #dae8fc; }
+.tab button:nth-child(2) { background-color: #e1d5e7; }
+.tab button:hover { background-color: #ddd; }
+.tab button.active { background-color: #ccc; }
+
+.tabcontent {
+    display: none;
     padding: 20px;
-    box-sizing: border-box;
-}
-
-body, html {
-    overflow-x: hidden; /* Hide horizontal scrollbar */
-    margin: 0; /* Remove default margin */
-}
-
-.subtitle {
-    color: #555; /* A softer color */
-    font-size: 1em; /* Smaller than the main heading */
-    font-weight: normal; /* Standard weight */
-    text-align: center; /* Center the text */
-    margin-top: 5px; /* Less space above */
-    margin-bottom: 15px; /* Adequate space below */
-    opacity: 0.7; /* Slightly subdued */
-}
-
-.calculator {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px; /* Maximum width */
+    max-width: 800px; /* Max width for the content area */
     margin: auto;
 }
 
-/* Tab Content Styling */
-.tabcontent {
-    display: none; /* Hide content initially */
-    padding: 20px;
-    border-top: none;
+.tabcontent.active { display: block; }
+
+
+.calcHistory {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
 }
 
-/* Active Tab Content */
-.tabcontent.active {
-    display: block; /* Show active tab content */
-}
-
-.tab, .tabcontent {
-    max-width: 800px; /* or any maximum width you prefer */
-    padding: 20px; /* optional padding for better spacing */
-    width: 100%; /* Responsive width */
-}
-
-/* Style for the tab buttons container */
-.tab {
-    display: flex; /* Aligns the tab buttons side by side */
-    justify-content: center; /* Centers the buttons horizontally */
-    border-bottom: 1px solid #ccc; /* Border under the tab buttons */
-    padding: 0;
-    margin: 0;
-}
-
-/* Style for each tab button */
-.tab button {
-    background-color: #f1f1f1; /* Default background color */
-    border: none; /* Remove border */
-    outline: none; /* Remove outline */
-    cursor: pointer; /* Pointer cursor on hover */
-    padding: 14px 16px; /* Padding inside the buttons */
-    transition: 0.3s; /* Smooth transition for hover effect */
-    margin-right: 2px; /* Space between buttons */
-}
-
-/* Color for each tab button */
-.tab button:nth-child(1) { background-color: #dae8fc; } /* Color for first tab */
-.tab button:nth-child(2) { background-color: #e1d5e7; } /* Color for second tab */
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
-}
-
-/* Style for the active tab button */
-.tab button.active {
-    background-color: #ccc; /* Active tab color */
-}
-
-/* Styling for the Gas Prices tab to match the Grocery Calculator */
-#GasPrices input[type=number] {
-    width: 100%; /* Match input width */
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
-
-#GasPrices button {
+/* Button styling */
+button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff; /* Primary button color */
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-#GasPrices button:hover {
-    background-color: #0056b3; /* Button hover effect */
-}
+button:hover { background-color: #0056b3; }
 
-#GasPrices p {
-    margin-top: 20px; /* Spacing for the output paragraph */
-}
-
-input[type=number] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    box-sizing: border-box;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: rgb(76, 76, 76);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#results {
+/* Results and small text styling */
+#results, #GasPrices p {
     margin-top: 20px;
 }
 
@@ -165,19 +91,9 @@ small {
     font-size: 0.8em;
 }
 
+/* Responsive Design */
 @media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    .calculator {
-        padding: 10px;
-    }
-}
-
-/* Responsive Design: Adjusts layout for smaller screens */
-@media screen and (max-width: 800px) {
-    .tab, .tabcontent {
+    body, .tabcontent {
         padding: 10px;
     }
 }

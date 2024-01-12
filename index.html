@@ -10,12 +10,12 @@
 <body>
     <!-- Tab Menu -->
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'GroceryCalculator')" id="defaultOpen">Grocery Calculator</button>
+        <button class="tablinks" onclick="openTab(event, 'Groceries')" id="defaultOpen">Grocery Calculator</button>
         <button class="tablinks" onclick="openTab(event, 'GasPrices')">Gas Prices</button>
     </div>
 
     <!-- Grocery Calculator Tab Content -->
-    <div id="GroceryCalculator" class="tabcontent">
+    <div id="Groceries" class="tabcontent">
         <h2>Grocery Price Converter</h2>
         <input type="number" id="itemPrice" placeholder="Item Price in USD">
         <input type="number" id="conversionRate" placeholder="Current USD to CAD Rate (e.g., 1.34)">
@@ -25,6 +25,7 @@
             <small>Includes 2.5% bank fee</small>
             <!-- <p id="bcPrice">Equivalent Price in BC (CAD): </p> -->
         </div>
+        <div id="groceryHistory" class="calcHistory"></div>
     </div>
 
     <!-- Gas Prices Tab Content -->
@@ -35,7 +36,12 @@
         <button id="convertGasPrice">Convert</button>
         <p id="gasPriceCAD">Price you pay per Liter (CAD): </p>
         <small>Includes 2.5% bank fee</small>
+        
+        <!-- ... inside Gas Prices Tab Content ... -->
+        <div id="gasHistory" class="calcHistory"></div>
     </div>
+
+    
 
     <!-- JavaScript File -->
     <script src="js/script.js"></script>
