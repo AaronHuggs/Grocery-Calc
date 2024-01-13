@@ -1,3 +1,9 @@
+// Load history from localStorage on page load
+window.onload = function() {
+    loadHistory("groceryHistory");
+    loadHistory("gasHistory");
+};
+
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
 
@@ -49,23 +55,53 @@ function validateInput(value) {
     return !isNaN(value) && value > 0;
 }
 
-// Function to add a history entry
+// Function to add a history entry and save to localStorage
 function addHistoryEntry(containerId, historyText) {
     var historyContainer = document.getElementById(containerId);
-    var currentDateTime = new Date().toLocaleString("en-US", { 
+    var currentDateTime = new Date().toLocaleString("en-US", {
         year: 'numeric', 
         month: 'short', 
         day: 'numeric',
         hour: '2-digit', 
-        minute: '2-digit' 
+        minute: '2-digit'
     });
-    var fullHistoryEntry = historyText + "              " + currentDateTime;
-    
-    // Create a new paragraph for each entry
-    var p = document.createElement("p");
-    p.textContent = fullHistoryEntry;
-    historyContainer.insertBefore(p, historyContainer.firstChild);
+
+    // Create a new div for each entry
+    var div = document.createElement("div");
+    div.className = "history-entry";
+    div.innerHTML = `
+        <div class="history-main-content">
+            <button class="delete-history-btn">×</button>
+            <span class="history-content">${historyText}</span>
+        </div>
+        <span class="history-date">${currentDateTime}</span>
+    `;
+
+    // Append the new div to the history container
+    historyContainer.insertBefore(div, historyContainer.firstChild);
+
+    // Add event listener to the delete button
+    var deleteBtn = div.querySelector('.delete-history-btn');
+    deleteBtn.addEventListener('click', function() {
+        div.remove(); // Remove the entry from the page
+        updateLocalStorageAfterDeletion(containerId); // Update localStorage
+    });
+
+    // Save to localStorage
+    saveHistory(containerId, div.innerHTML);
 }
+
+
+
+// Function to update localStorage after an entry is deleted
+function updateLocalStorageAfterDeletion(containerId) {
+    var historyContainer = document.getElementById(containerId);
+    var allEntries = Array.from(historyContainer.getElementsByClassName('history-entry'));
+    var updatedEntries = allEntries.map(entry => entry.innerHTML);
+    localStorage.setItem(containerId, JSON.stringify(updatedEntries));
+}
+
+
 
 // Function to synchronize conversion rates between tabs
 function syncConversionRates(sourceId, targetId) {
@@ -74,6 +110,59 @@ function syncConversionRates(sourceId, targetId) {
         document.getElementById(targetId).value = sourceValue;
     }
 }
+
+// Function to save history to localStorage
+function saveHistory(containerId, newEntry) {
+    var existingEntries = localStorage.getItem(containerId) ? JSON.parse(localStorage.getItem(containerId)) : [];
+    existingEntries.unshift(newEntry);
+    localStorage.setItem(containerId, JSON.stringify(existingEntries));
+}
+
+// Function to reattach delete event listeners to all delete buttons in a container
+function reattachDeleteEventListeners(containerId) {
+    var historyContainer = document.getElementById(containerId);
+    var deleteButtons = historyContainer.getElementsByClassName('delete-history-btn');
+
+    Array.from(deleteButtons).forEach(button => {
+        button.addEventListener('click', function() {
+            var entryDiv = button.closest('.history-entry');
+            if (entryDiv) {
+                entryDiv.remove(); // Remove the entry from the page
+                updateLocalStorageAfterDeletion(containerId); // Update localStorage
+            }
+        });
+    });
+}
+
+// Function to load history from localStorage
+function loadHistory(containerId) {
+    var historyContainer = document.getElementById(containerId);
+    var entries = localStorage.getItem(containerId) ? JSON.parse(localStorage.getItem(containerId)) : [];
+    
+    entries.forEach(entryHtml => {
+        var div = document.createElement("div");
+        div.className = "history-entry";
+        div.innerHTML = entryHtml;
+        historyContainer.appendChild(div);
+    });
+
+    // Reattach event listeners to delete buttons after loading
+    reattachDeleteEventListeners(containerId);
+}
+
+function clearHistory(containerId) {
+    localStorage.removeItem(containerId);
+    document.getElementById(containerId).innerHTML = '';
+}
+
+// Clear history functions and event listeners
+document.getElementById('clearGroceryHistory').addEventListener('click', function() {
+    clearHistory("groceryHistory");
+});
+
+document.getElementById('clearGasHistory').addEventListener('click', function() {
+    clearHistory("gasHistory");
+});
 
 // Event listeners for conversion rate inputs
 document.getElementById('conversionRate').addEventListener('input', function() {
@@ -105,9 +194,13 @@ document.getElementById('calculate').addEventListener('click', function() {
 
     document.getElementById('cadPrice').textContent = 'Price Paid in Bellingham (CAD): ' + finalCadPrice.toFixed(2) + ' CAD';
 
-    // Include item name in history if provided
-    var historyText = itemName ? `${itemName}: $${itemPrice.toFixed(2)} -> $${finalCadPrice.toFixed(2)}` : `$${itemPrice.toFixed(2)} -> $${finalCadPrice.toFixed(2)}`;
-    addHistoryEntry("groceryHistory", historyText);
+   // Construct the full history entry text with spans for bold styling
+   var historyText = (itemName ? `<span class="history-item-name">${itemName}</span>: ` : "") + `$${itemPrice.toFixed(2)} USD -> <span class="history-cad-price">$${finalCadPrice.toFixed(2)}</span> CAD`;
+   addHistoryEntry("groceryHistory", historyText);
+
+    // Clearing the input fields after calculation
+    document.getElementById('itemPrice').value = "";
+    document.getElementById('itemName').value = ""; // Clear the item name field
     
 });
 
@@ -129,7 +222,13 @@ document.getElementById('convertGasPrice').addEventListener('click', function() 
 
     document.getElementById('gasPriceCAD').textContent = 'Price in CAD per Liter: ' + gasPriceCAD.toFixed(2) + ' CAD';
 
-    addHistoryEntry("gasHistory", gasPriceUSD.toFixed(2), gasPriceCAD);
+    // Construct the full history entry text with span for bold CAD price
+    var historyText = `$${gasPriceUSD.toFixed(2)} per gallon -> <span class="history-cad-price">$${gasPriceCAD.toFixed(2)}</span> per liter`;
+    addHistoryEntry("gasHistory", historyText);
+
+
+    // Clearing the input field after calculation
+    document.getElementById('gasPriceUSD').value = "";
 
 });
 
