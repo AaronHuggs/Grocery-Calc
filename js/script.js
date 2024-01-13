@@ -1,6 +1,8 @@
 // Load history from localStorage on page load
 window.onload = function() {
     loadHistory("groceryHistory");
+    recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after deletion
+
     loadHistory("gasHistory");
 };
 
@@ -55,6 +57,25 @@ function validateInput(value) {
     return !isNaN(value) && value > 0;
 }
 
+// Function to recalculate and update the running total
+function recalculateAndUpdateTotal(containerId) {
+    var historyContainer = document.getElementById(containerId);
+    var totalElementId = containerId.replace("History", "") + "Total";
+    var totalElement = document.getElementById(totalElementId);
+
+    if (totalElement) {
+        var allEntries = historyContainer.getElementsByClassName('history-content');
+        var total = Array.from(allEntries).reduce((sum, entry) => {
+            var match = entry.textContent.match(/\$(\d+\.\d\d) CAD$/); // Regex to extract CAD price
+            return sum + (match ? parseFloat(match[1]) : 0);
+        }, 0);
+
+        totalElement.textContent = `Total: $${total.toFixed(2)} CAD`;
+    }
+}
+
+
+
 // Function to add a history entry and save to localStorage
 function addHistoryEntry(containerId, historyText) {
     var historyContainer = document.getElementById(containerId);
@@ -85,7 +106,12 @@ function addHistoryEntry(containerId, historyText) {
     deleteBtn.addEventListener('click', function() {
         div.remove(); // Remove the entry from the page
         updateLocalStorageAfterDeletion(containerId); // Update localStorage
+        recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after deletion
+
     });
+
+    // Update running total after adding entry
+    recalculateAndUpdateTotal("groceryHistory");
 
     // Save to localStorage
     saveHistory(containerId, div.innerHTML);
@@ -99,6 +125,10 @@ function updateLocalStorageAfterDeletion(containerId) {
     var allEntries = Array.from(historyContainer.getElementsByClassName('history-entry'));
     var updatedEntries = allEntries.map(entry => entry.innerHTML);
     localStorage.setItem(containerId, JSON.stringify(updatedEntries));
+
+    // Recalculate the total after deletion
+    recalculateAndUpdateTotal("groceryHistory");
+
 }
 
 
@@ -148,6 +178,9 @@ function loadHistory(containerId) {
 
     // Reattach event listeners to delete buttons after loading
     reattachDeleteEventListeners(containerId);
+
+    // Update the total
+    recalculateAndUpdateTotal("groceryHistory");
 }
 
 function clearHistory(containerId) {
@@ -185,18 +218,19 @@ document.getElementById('calculate').addEventListener('click', function() {
         return;
     }
 
-    var bellinghamTax = 0.088; // 8.8%
     var bankRate = 0.025; // Bank fee of 2.5%
 
-    var finalUsdPrice = itemPrice * (1 + bellinghamTax);
-    var adjustedConversionRate = conversionRate * (1 + bankRate);
-    var finalCadPrice = finalUsdPrice * adjustedConversionRate;
+    var finalUsdPrice = itemPrice;
+    var finalCadPrice = itemPrice * conversionRate * (1 + bankRate);
+    document.getElementById('cadPrice').innerHTML = `Amount you pay: <strong>$${finalCadPrice.toFixed(2)}</strong> CAD`;
 
-    document.getElementById('cadPrice').textContent = 'Price Paid in Bellingham (CAD): ' + finalCadPrice.toFixed(2) + ' CAD';
+
 
    // Construct the full history entry text with spans for bold styling
    var historyText = (itemName ? `<span class="history-item-name">${itemName}</span>: ` : "") + `$${itemPrice.toFixed(2)} USD -> <span class="history-cad-price">$${finalCadPrice.toFixed(2)}</span> CAD`;
    addHistoryEntry("groceryHistory", historyText);
+   recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after adding
+
 
     // Clearing the input fields after calculation
     document.getElementById('itemPrice').value = "";
@@ -220,7 +254,8 @@ document.getElementById('convertGasPrice').addEventListener('click', function() 
     var adjustedConversionRate = conversionRateGas * (1 + bankRate);
     var gasPriceCAD = (gasPriceUSD / gallonsToLiters) * adjustedConversionRate;
 
-    document.getElementById('gasPriceCAD').textContent = 'Price in CAD per Liter: ' + gasPriceCAD.toFixed(2) + ' CAD';
+    document.getElementById('gasPriceCAD').innerHTML = `Amount you pay: <strong>$${gasPriceCAD.toFixed(2)}</strong> CAD`;
+
 
     // Construct the full history entry text with span for bold CAD price
     var historyText = `$${gasPriceUSD.toFixed(2)} per gallon -> <span class="history-cad-price">$${gasPriceCAD.toFixed(2)}</span> per liter`;

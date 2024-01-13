@@ -93,6 +93,13 @@ small {
     font-size: 0.8em;
 }
 
+.running-total {
+    margin-top: 15px; /* Adds space above the total */
+    text-align: center; /* Centers the text */
+    font-weight: bold; /* Optional: Makes the text bold */
+    /* Additional styling as needed */
+}
+
 
 .clear-history-btn {
     background-color: #f44336; /* Example: Red background */

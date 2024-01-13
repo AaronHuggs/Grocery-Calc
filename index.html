@@ -22,12 +22,12 @@
         <input type="number" id="conversionRate" placeholder="Current USD to CAD Rate (e.g., 1.34)" value="1.34">
         <button id="calculate">Convert</button>
         <div id="results">
-            <p id="cadPrice">Amount you pay (CAD): </p>
+            <p id="cadPrice">Amount you pay: </p>
             <small>Includes 2.5% bank fee</small>
             <!-- <p id="bcPrice">Equivalent Price in BC (CAD): </p> -->
         </div>
         <button id="clearGroceryHistory" class="clear-history-btn">Clear History</button>
-
+        <div id="groceryTotal" class="running-total">Total: $0.00 CAD</div>
         <div id="groceryHistory" class="calcHistory"></div>
     </div>
 
@@ -37,7 +37,7 @@
         <input type="number" id="gasPriceUSD" placeholder="Price in USD per Gallon">
         <input type="number" id="conversionRateGas" placeholder="Current USD to CAD Rate (e.g., 1.34)" value="1.34">
         <button id="convertGasPrice">Convert</button>
-        <p id="gasPriceCAD">Price you pay per Liter (CAD): </p>
+        <p id="gasPriceCAD">Amount you pay: </p>
         <small>Includes 2.5% bank fee</small>
 
         <button id="clearGasHistory" class="clear-history-btn">Clear History</button>
