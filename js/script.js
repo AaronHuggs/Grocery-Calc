@@ -2,8 +2,9 @@
 window.onload = function() {
     loadHistory("groceryHistory");
     recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after deletion
-
+    updateClearButtonState("groceryHistory");
     loadHistory("gasHistory");
+    updateClearButtonState("gasHistory");
 };
 
 function openTab(evt, tabName) {
@@ -104,11 +105,11 @@ function addHistoryEntry(containerId, historyText) {
     // Add event listener to the delete button
     var deleteBtn = div.querySelector('.delete-history-btn');
     deleteBtn.addEventListener('click', function() {
-        div.remove(); // Remove the entry from the page
-        updateLocalStorageAfterDeletion(containerId); // Update localStorage
-        recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after deletion
-
-    });
+    div.remove(); // Remove the entry from the page
+    updateLocalStorageAfterDeletion(containerId); // Update localStorage
+    recalculateAndUpdateTotal(containerId); // Recalculate total after deletion
+    updateClearButtonState(containerId); // Update button state after deletion
+});
 
     // Update running total after adding entry
     recalculateAndUpdateTotal("groceryHistory");
@@ -186,15 +187,26 @@ function loadHistory(containerId) {
 function clearHistory(containerId) {
     localStorage.removeItem(containerId);
     document.getElementById(containerId).innerHTML = '';
+    
+    // Reset the total to $0.00
+    var totalElementId = containerId.replace("History", "") + "Total";
+    var totalElement = document.getElementById(totalElementId);
+    if (totalElement) {
+        totalElement.textContent = 'Total: $0.00 CAD';
+    }
 }
 
 // Clear history functions and event listeners
 document.getElementById('clearGroceryHistory').addEventListener('click', function() {
     clearHistory("groceryHistory");
+    updateClearButtonState("groceryHistory"); // Update button state after clearing history
+
 });
 
 document.getElementById('clearGasHistory').addEventListener('click', function() {
     clearHistory("gasHistory");
+    updateClearButtonState("gasHistory"); // Update button state after clearing history
+
 });
 
 // Event listeners for conversion rate inputs
@@ -229,6 +241,7 @@ document.getElementById('calculate').addEventListener('click', function() {
    // Construct the full history entry text with spans for bold styling
    var historyText = (itemName ? `<span class="history-item-name">${itemName}</span>: ` : "") + `$${itemPrice.toFixed(2)} USD -> <span class="history-cad-price">$${finalCadPrice.toFixed(2)}</span> CAD`;
    addHistoryEntry("groceryHistory", historyText);
+   updateClearButtonState("groceryHistory");
    recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after adding
 
 
@@ -260,12 +273,30 @@ document.getElementById('convertGasPrice').addEventListener('click', function() 
     // Construct the full history entry text with span for bold CAD price
     var historyText = `$${gasPriceUSD.toFixed(2)} per gallon -> <span class="history-cad-price">$${gasPriceCAD.toFixed(2)}</span> per liter`;
     addHistoryEntry("gasHistory", historyText);
-
+    updateClearButtonState("gasHistory");
 
     // Clearing the input field after calculation
     document.getElementById('gasPriceUSD').value = "";
 
 });
+
+function updateClearButtonState(containerId) {
+    var clearButtonId = containerId === "groceryHistory" ? "clearGroceryHistory" : "clearGasHistory";
+    var clearButton = document.getElementById(clearButtonId);
+
+    var historyContainer = document.getElementById(containerId);
+    if (historyContainer.getElementsByClassName('history-entry').length === 0) {
+        // Disable the button or change its style when no history entries are present
+        clearButton.disabled = true;
+        clearButton.style.backgroundColor = "#ccc"; // Greyed out color
+        clearButton.style.cursor = "default";
+    } else {
+        // Enable the button or revert its style when history entries are present
+        clearButton.disabled = false;
+        clearButton.style.backgroundColor = ""; // Revert to original color
+        clearButton.style.cursor = "pointer";
+    }
+}
 
 // Set the default open tab (Grocery Calculator)
 document.getElementById("defaultOpen").click();
