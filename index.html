@@ -17,7 +17,11 @@
     <!-- Grocery Calculator Tab Content -->
     <div id="Groceries" class="tabcontent">
         <h2>Grocery Price Converter</h2>
-        <input type="number" id="itemPrice" placeholder="Item Price in USD">
+        <div class="input-group">
+            <input type="number" id="itemQuantity" value="1" min="1" placeholder="Qty" class="quantity-input">
+            <span>x</span>
+            <input type="number" id="itemPrice" placeholder="Item Price in USD" class="price-input">
+        </div>
         <input type="text" id="itemName" placeholder="Item Name (Optional)"> <!-- New input for item name -->
         <input type="number" id="conversionRate" placeholder="Current USD to CAD Rate (e.g., 1.34)" value="1.34">
         <button id="calculate">Convert</button>

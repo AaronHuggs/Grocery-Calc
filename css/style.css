@@ -60,6 +60,25 @@ input {
 
 .tabcontent.active { display: block; }
 
+.input-group {
+    display: flex; /* Aligns children inline */
+    align-items: center; /* Centers items vertically */
+    margin-bottom: 10px; /* Adds some space below the group */
+}
+
+.quantity-input{
+    margin-right: 5px; /* Adds spacing between the inputs and the 'X' */
+    width: 50px; /* Adjust width as needed */
+}
+
+.price-input {
+    flex-grow: 1; /* Allows the price input to take up remaining space */
+    margin-left: 5px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
 
 .calcHistory {
     margin-top: 20px;

@@ -220,6 +220,7 @@ document.getElementById('conversionRateGas').addEventListener('input', function(
 
 // Grocery Calculator Logic with Error Handling
 document.getElementById('calculate').addEventListener('click', function() {
+    var quantity = parseInt(document.getElementById('itemQuantity').value) || 1;
     var itemPrice = parseFloat(document.getElementById('itemPrice').value);
     var conversionRate = parseFloat(document.getElementById('conversionRate').value);
     var itemName = document.getElementById('itemName').value.trim(); // Get item name and trim whitespace
@@ -232,20 +233,21 @@ document.getElementById('calculate').addEventListener('click', function() {
 
     var bankRate = 0.025; // Bank fee of 2.5%
 
-    var finalUsdPrice = itemPrice;
-    var finalCadPrice = itemPrice * conversionRate * (1 + bankRate);
+    var finalUsdPrice = quantity * itemPrice; // Include quantity in the calculation
+    var finalCadPrice = finalUsdPrice * conversionRate * (1 + bankRate);
     document.getElementById('cadPrice').innerHTML = `Amount you pay: <strong>$${finalCadPrice.toFixed(2)}</strong> CAD`;
 
 
 
    // Construct the full history entry text with spans for bold styling
-   var historyText = (itemName ? `<span class="history-item-name">${itemName}</span>: ` : "") + `$${itemPrice.toFixed(2)} USD -> <span class="history-cad-price">$${finalCadPrice.toFixed(2)}</span> CAD`;
+   var historyText = (itemName ? `<span class="history-item-name">${itemName}</span>: ` : "") + `${quantity} x $${itemPrice.toFixed(2)} USD -> <span class="history-cad-price">$${finalCadPrice.toFixed(2)}</span> CAD`;
    addHistoryEntry("groceryHistory", historyText);
    updateClearButtonState("groceryHistory");
    recalculateAndUpdateTotal("groceryHistory"); // Recalculate total after adding
 
 
     // Clearing the input fields after calculation
+    document.getElementById('itemQuantity').value = 1;
     document.getElementById('itemPrice').value = "";
     document.getElementById('itemName').value = ""; // Clear the item name field
     
