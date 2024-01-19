@@ -1,202 +1,122 @@
-/* Apply box-sizing to all elements */
-* {
-    box-sizing: border-box;
-}
-
-body, html {
+body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f0f8ff; /* Light blue background */
     margin: 0;
+    padding: 0;
+}
+
+h3 {
+    font-weight: normal;
+}
+
+.container {
+    width: 100%;        /* Adjust to use full width on smaller screens */
+    max-width: 384px;   /* Maximum width set to 384px for larger screens */
+    min-width: 380px;
+    margin: 0 auto;     /* Center the container */
     padding: 20px;
-    overflow-x: hidden; /* Hide horizontal scrollbar */
+    color: #333;
 }
 
-/* Hide spinners for number inputs */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none; /* For WebKit browsers like Chrome and Safari */
-    margin: 0; /* For some WebKit browsers */
-}
-
-/* Style for all input fields */
-input {
-    width: 100%;
+.input-section input,
+.input-section select,
+.input-section button {
     padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
+    margin: 5px;
     border: 1px solid #ddd;
-    box-sizing: border-box;
+    border-radius: 4px;
 }
 
-/* Tab buttons and content styling */
-.tab {
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid #ccc;
-    margin: 0;
-}
-
-.tab button {
-    background-color: #f1f1f1;
-    border: none;
-    outline: none;
+.input-section button {
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    margin-right: 2px;
-}
-
-.tab button:nth-child(1) { background-color: #dae8fc; }
-.tab button:nth-child(2) { background-color: #e1d5e7; }
-.tab button:hover { background-color: #ddd; }
-.tab button.active { background-color: #ccc; }
-
-.tabcontent {
-    display: none;
-    padding: 20px;
-    max-width: 800px; /* Max width for the content area */
-    margin: auto;
-}
-
-.tabcontent.active { display: block; }
-
-.input-group {
-    display: flex; /* Aligns children inline */
-    align-items: center; /* Centers items vertically */
-    margin-bottom: 10px; /* Adds some space below the group */
-}
-
-.quantity-input{
-    margin-right: 5px; /* Adds spacing between the inputs and the 'X' */
-    width: 50px; /* Adjust width as needed */
-}
-
-.price-input {
-    flex-grow: 1; /* Allows the price input to take up remaining space */
-    margin-left: 5px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-top: 0px;
-}
-
-
-.calcHistory {
-    margin-top: 20px;
-    border-top: 1px solid #ccc;
-    padding-top: 10px;
-}
-
-/* Button styling */
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
+    background-color: #4CAF50; /* Green buttons */
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-button:hover { background-color: #0056b3; }
-
-/* Results and small text styling */
-#results, #GasPrices p {
+.lists {
     margin-top: 20px;
 }
 
-small {
-    display: block;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    color: #555;
-    font-size: 0.8em;
-}
-
-.running-total {
-    margin-top: 15px; /* Adds space above the total */
-    text-align: center; /* Centers the text */
-    font-weight: bold; /* Optional: Makes the text bold */
-    /* Additional styling as needed */
-}
-
-
-.clear-history-btn {
-    background-color: #f44336; /* Example: Red background */
-    color: white; /* White text color */
-    /* Other styling to match your buttons, like padding, border, etc. */
+.list {
+    background-color: #fff;
+    border: 1px solid #ddd;
     padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px; /* Space above the button */
-}
-
-.clear-history-btn:hover {
-    background-color: #d32f2f; /* Darker red on hover */
-}
-
-
-.history-entry {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     margin-bottom: 10px;
 }
 
-.delete-history-btn {
-    background-color: #fff;
-    border: 1px solid #ccc;
+.list h2 {
+    margin: 0;
+    margin-bottom: 10px;
+    text-align: center;
+    text-decoration: underline;
+
+}
+
+.list h3 {
+    text-align: center;
+}
+
+.list-item {
+    border-bottom: 1px solid #eee;
+    padding: 5px;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.remove-item {
     color: red;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 0.8em;
-    padding: 2px 5px;
-    margin-right: 5px;
-    flex-shrink: 0; /* Prevent the button from shrinking */
-    flex-basis: 5%; /* Button width */
+    float: right;
 }
 
-.history-main-content {
-    display: flex;
-    align-items: center;
-    width: 100%;
+#quantity {
+    width: 50px;
 }
 
-.history-content {
-    flex-grow: 1; /* Allow content to fill the remaining space */
-    margin-left: 5px; /* Optional: adds some space between button and text */
+#delete-list {
+    background-color: red;
 }
 
-.history-date {
+.tax-applied {
+    color: blue;
+}
+
+.sales-tax-text {
+    color: blue;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    width: 220px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    z-index: 1;
+    top: 20%; 
+    left: 70%;
+    transform: translateX(-50%);
+}
+
+/* Additional styling for visibility */
+.sales-tax-text:hover + .tooltip, .tooltip:hover {
     display: block;
-    font-size: 0.8em;
-    text-align: right;
-    color: #555;
-    margin-top: 5px;
-    width: 100%; /* Ensure it takes the full width for right alignment */
 }
 
-.history-item-name, .history-cad-price {
-    font-weight: bold; /* Bold for item name and CAD price */
+#list-select.highlight-required {
+    border: 2px solid red !important;
 }
 
 
-.delete-history-btn {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    color: red;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.8em;
-    padding: 2px 5px;
-    margin-right: 5px;
-    align-self: flex-start; /* Align to the top left */
-}
-
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    body, .tabcontent {
-        padding: 10px;
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+    }
+    .input-section, .lists {
+        flex-direction: column;
     }
 }

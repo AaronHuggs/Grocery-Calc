@@ -3,53 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Food & Farts Converter</title>
+    <title>Shopping Calculator</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Tab Menu -->
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Groceries')" id="defaultOpen">Grocery Calculator</button>
-        <button class="tablinks" onclick="openTab(event, 'GasPrices')">Gas Prices</button>
-    </div>
+    <div class="container">
+        <h1>Shopping Calculator</h1>
+        <div class="input-section">
+            <select id="list-select">
+                <option value="" disabled selected>Select/List Name</option>
+            </select>
+            <input type="text" id="new-list-name" placeholder="New List Name">
+            <button id="add-list">Create List</button>
+            <button id="delete-list">Delete List</button>
+            <hr>
+            <input type="number" id="price" placeholder="Item Price (USD)" step="0.01">
+            <label for="tax"><input type="checkbox" id="tax"> Add </label>
+            <span class="sales-tax-text" id="salesTaxText">Sales Tax</span>
+            <div class="tooltip" id="salesTaxTooltip">Bellingham Sales Tax adds 8.8% to all non-grocery items</div>
 
-    <!-- Grocery Calculator Tab Content -->
-    <div id="Groceries" class="tabcontent">
-        <h2>Grocery Price Converter</h2>
-        <div class="input-group">
-            <input type="number" id="itemQuantity" value="1" min="1" placeholder="Qty" class="quantity-input">
-            <span>x</span>
-            <input type="number" id="itemPrice" placeholder="Item Price in USD" class="price-input">
+            <input type="number" id="quantity" placeholder="Quantity" min="1" value="1">
+            <input type="text" id="description" placeholder="Item Description">            
+            <button id="calculate">Calculate</button>
+            <hr>
         </div>
-        <input type="text" id="itemName" placeholder="Item Name (Optional)"> <!-- New input for item name -->
-        <input type="number" id="conversionRate" placeholder="Current USD to CAD Rate (e.g., 1.34)" value="1.34">
-        <button id="calculate">Convert</button>
-        <div id="results">
-            <p id="cadPrice">Amount you pay: </p>
-            <small>Includes 2.5% bank fee</small>
+        <div id="result"></div>
+        <div class="lists">
+            <!-- Lists will be dynamically added here -->
         </div>
-        <button id="clearGroceryHistory" class="clear-history-btn">Clear History</button>
-        <div id="groceryTotal" class="running-total">Total: $0.00 CAD</div>
-        <div id="groceryHistory" class="calcHistory"></div>
     </div>
-
-    <!-- Gas Prices Tab Content -->
-    <div id="GasPrices" class="tabcontent">
-        <h2>Gas Price Converter</h2>
-        <input type="number" id="gasPriceUSD" placeholder="Price in USD per Gallon">
-        <input type="number" id="conversionRateGas" placeholder="Current USD to CAD Rate (e.g., 1.34)" value="1.34">
-        <button id="convertGasPrice">Convert</button>
-        <p id="gasPriceCAD">Amount you pay: </p>
-        <small>Includes 2.5% bank fee</small>
-
-        <button id="clearGasHistory" class="clear-history-btn">Clear History</button>
-        <div id="gasHistory" class="calcHistory"></div>
-    </div>
-
-    
-
-    <!-- JavaScript File -->
     <script src="js/script.js"></script>
 </body>
 </html>
